@@ -125,11 +125,11 @@ def getDataFromDB():
     return tag_name, warning
 
 
-if __name__ == '__main__':
-    application.run()
-    # HOST = os.environ.get('SERVER_HOST', 'localhost')
-    # try:
-    #     PORT = int(os.environ.get('SERVER_PORT', '5555'))
-    # except ValueError:
-    #     PORT = 5555
-    # application.run(HOST, 5000, debug=True)
+# if __name__ == '__main__':
+#     application.run()
+#     HOST = os.environ.get('SERVER_HOST', 'localhost')
+#     try:
+#         PORT = int(os.environ.get('SERVER_PORT', '5555'))
+#     except ValueError:
+#         PORT = 5555
+#     application.run(HOST, 5000, debug=True)
