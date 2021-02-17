@@ -126,9 +126,10 @@ def getDataFromDB():
 
 
 if __name__ == '__main__':
-    HOST = os.environ.get('SERVER_HOST', 'localhost')
-    try:
-        PORT = int(os.environ.get('SERVER_PORT', '5555'))
-    except ValueError:
-        PORT = 5555
-    application.run(HOST, 5000, debug=True)
+    application.run(host="0.0.0.0")
+    # HOST = os.environ.get('SERVER_HOST', 'localhost')
+    # try:
+    #     PORT = int(os.environ.get('SERVER_PORT', '5555'))
+    # except ValueError:
+    #     PORT = 5555
+    # application.run(HOST, 5000, debug=True)
