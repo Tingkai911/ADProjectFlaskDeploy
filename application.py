@@ -25,10 +25,8 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 ConnectionString = os.getenv("CONNECTION_STRING")
-SecretKey = os.getenv("SECRET_KEY")
 
 application = Flask(__name__)
-application.config["SECRET_KEY"] = SecretKey
 
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 # wsgi_app = application.wsgi_app
@@ -125,11 +123,11 @@ def getDataFromDB():
     return tag_name, warning
 
 
-# if __name__ == '__main__':
-#     application.run()
-#     HOST = os.environ.get('SERVER_HOST', 'localhost')
-#     try:
-#         PORT = int(os.environ.get('SERVER_PORT', '5555'))
-#     except ValueError:
-#         PORT = 5555
-#     application.run(HOST, 5000, debug=True)
+if __name__ == '__main__':
+    application.run(debug=True)
+    # HOST = os.environ.get('SERVER_HOST', 'localhost')
+    # try:
+    #     PORT = int(os.environ.get('SERVER_PORT', '5555'))
+    # except ValueError:
+    #     PORT = 5555
+    # application.run(HOST, 5000, debug=True)
