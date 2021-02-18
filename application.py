@@ -51,7 +51,7 @@ def receiveData():
 def generate_allergen_tage():
     data = request.get_json()
 
-    print(data)
+    # print(data)
 
     corpus_recipe = data["ingredients"]
 
@@ -67,8 +67,8 @@ def generate_allergen_tage():
     corpus_ingredient = data["corpus_ingredient"]
     corpus_allergen = data["corpus_allergen"]
 
-    print(corpus_ingredient)
-    print(corpus_allergen)
+    # print(corpus_ingredient)
+    # print(corpus_allergen)
 
     # Load the pre-calculated TF-IDF for the allergen tags
     tfidf_allergen = pd.read_csv("allergen_dataframe.csv")
@@ -86,7 +86,7 @@ def generate_allergen_tage():
         words_stemmed = [porter.stem(w) for w in doc_no_punc.lower().split()
                         if not w in stop_words]
         docs += [' '.join(words_stemmed)]
-    # print(docs)
+    print(docs)
     tfidf_wm = loaded_model.transform(docs).toarray()
     features = loaded_model.get_feature_names()
     tfidf_recipes = pd.DataFrame(data=tfidf_wm, columns=features)
@@ -94,20 +94,30 @@ def generate_allergen_tage():
 
     # Calculate cosine similarity
     docs_similarity = cosine_similarity(tfidf_recipes, tfidf_allergen)
-    query_similarity = docs_similarity[0]
-    query_similarity
+    # query_similarity = docs_similarity[0]
+    # print(docs_similarity)
 
-    series = pd.Series(query_similarity, index=tfidf_allergen.index)
-    sorted_series = series.sort_values(ascending=False)
-    sorted_series = sorted_series[sorted_series != 0]
-    # print(sorted_series)
+    # series = pd.Series(query_similarity, index=tfidf_allergen.index)
+    # sorted_series = series.sort_values(ascending=False)
+    # sorted_series = sorted_series[sorted_series != 0]
+    # # print(sorted_series)
 
-    # Get the Tags
-    tags = []
-    for index in sorted_series.index:
-        print("[Ingredient = ", corpus_ingredient[index], "]\n", corpus_allergen[index], " [score = ", sorted_series[index], "]\n", sep='')
-        tags.append(corpus_allergen[index])
+    # # Get the Tags
+    # tags = []
+    # for index in sorted_series.index:
+    #     print("[Ingredient = ", corpus_ingredient[index], "]\n", corpus_allergen[index], " [score = ", sorted_series[index], "]\n", sep='')
+    #     tags.append(corpus_allergen[index])
     # print(tags)
+
+    tags = []
+    for count, query_similarity in enumerate(docs_similarity):
+        series = pd.Series(query_similarity, index=tfidf_allergen.index)
+        sorted_series = series.sort_values(ascending=False)
+        sorted_series = sorted_series[sorted_series != 0]
+        for index in sorted_series.index:
+            print("[Ingredient = ", corpus_ingredient[index], "]\n", corpus_allergen[index], " [score = ", sorted_series[index], "]\n", sep='')
+            tags.append(corpus_allergen[index])
+        print(tags)
 
     return_data = { "allergens": tags }
 
