@@ -24,7 +24,7 @@ from urllib import parse
 from dotenv import load_dotenv
 import os
 load_dotenv()
-ConnectionString = os.getenv("CONNECTION_STRING")
+ConnectionString = os.environ.get("CONNECTION_STRING")
 
 application = Flask(__name__)
 application.secret_key="password123"
@@ -108,7 +108,7 @@ def generate_allergen_tage():
     return jsonify(return_data)
 
 def getDataFromDB():
-    params = parse.quote_plus(ConnectionString)
+    params = parse.quote_plus(str(ConnectionString))
     engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 
     tag_name = []
