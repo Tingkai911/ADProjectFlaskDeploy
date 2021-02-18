@@ -3,7 +3,8 @@ This script runs the application using a development server.
 It contains the definition of routes and views for the application.
 """
 import nltk
-#nltk.download('stopwords')
+nltk.download('stopwords')
+
 import numpy as np
 import string
 import pandas as pd
