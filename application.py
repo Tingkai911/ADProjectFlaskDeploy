@@ -124,7 +124,7 @@ def getDataFromDB():
 
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    application.run(port=5000, debug=True)
     # HOST = os.environ.get('SERVER_HOST', 'localhost')
     # try:
     #     PORT = int(os.environ.get('SERVER_PORT', '5555'))

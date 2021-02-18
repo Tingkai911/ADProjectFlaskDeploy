@@ -1,6 +1,7 @@
 venv/
 .env
 .vscode
+trainmodel.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
