@@ -21,9 +21,7 @@ import pyodbc
 from urllib import parse
 
 # User environment variables for database connection
-from dotenv import load_dotenv
 import os
-load_dotenv()
 ConnectionString = os.environ.get("CONNECTION_STRING")
 
 application = Flask(__name__)
