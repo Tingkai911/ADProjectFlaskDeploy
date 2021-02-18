@@ -20,10 +20,6 @@ import pyodbc
 
 from urllib import parse
 
-# User environment variables for database connection
-import os
-ConnectionString = os.environ.get("CONNECTION_STRING")
-
 application = Flask(__name__)
 application.secret_key="password123"
 
@@ -106,7 +102,7 @@ def generate_allergen_tage():
     return jsonify(return_data)
 
 def getDataFromDB():
-    params = parse.quote_plus(ConnectionString)
+    params = parse.quote_plus("Driver={ODBC Driver 17 for SQL Server};Server=tcp:recipe4medbserver.database.windows.net,1433;Database=Recipe4Me_db;Uid=recipe4me;Pwd={password@123};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
     engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 
     tag_name = []
