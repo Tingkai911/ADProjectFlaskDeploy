@@ -108,7 +108,7 @@ def generate_allergen_tage():
     return jsonify(return_data)
 
 def getDataFromDB():
-    params = parse.quote_plus(ConnectionString.encode("utf-8"))
+    params = parse.quote_plus(ConnectionString)
     engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 
     tag_name = []
