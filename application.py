@@ -49,6 +49,9 @@ def receiveData():
 @application.route("/api/allergentags", methods=["POST"])
 def generate_allergen_tage():
     data = request.get_json()
+
+    print(data)
+
     corpus_recipe = data["ingredients"]
 
     print(corpus_recipe)
@@ -57,7 +60,14 @@ def generate_allergen_tage():
     # df = pd.read_csv("FoodData.csv")
     # corups_allergen = df["Allergy"].tolist()
     # corpus_ingredient = df["Food"].tolist()
-    corpus_ingredient, corups_allergen = getDataFromDB()
+
+    # corpus_ingredient, corups_allergen = getDataFromDB()
+    
+    corpus_ingredient = data["corpus_ingredient"]
+    corpus_allergen = data["corpus_allergen"]
+
+    print(corpus_ingredient)
+    print(corpus_allergen)
 
     # Load the pre-calculated TF-IDF for the allergen tags
     tfidf_allergen = pd.read_csv("allergen_dataframe.csv")
@@ -75,11 +85,11 @@ def generate_allergen_tage():
         words_stemmed = [porter.stem(w) for w in doc_no_punc.lower().split()
                         if not w in stop_words]
         docs += [' '.join(words_stemmed)]
-    print(docs)
+    # print(docs)
     tfidf_wm = loaded_model.transform(docs).toarray()
     features = loaded_model.get_feature_names()
     tfidf_recipes = pd.DataFrame(data=tfidf_wm, columns=features)
-    print(tfidf_recipes)
+    # print(tfidf_recipes)
 
     # Calculate cosine similarity
     docs_similarity = cosine_similarity(tfidf_recipes, tfidf_allergen)
@@ -89,33 +99,33 @@ def generate_allergen_tage():
     series = pd.Series(query_similarity, index=tfidf_allergen.index)
     sorted_series = series.sort_values(ascending=False)
     sorted_series = sorted_series[sorted_series != 0]
-    print(sorted_series)
+    # print(sorted_series)
 
     # Get the Tags
     tags = []
     for index in sorted_series.index:
-        print("[Ingredient = ", corpus_ingredient[index], "]\n", corups_allergen[index], " [score = ", sorted_series[index], "]\n", sep='')
-        tags.append(corups_allergen[index])
-    print(tags)
+        print("[Ingredient = ", corpus_ingredient[index], "]\n", corpus_allergen[index], " [score = ", sorted_series[index], "]\n", sep='')
+        tags.append(corpus_allergen[index])
+    # print(tags)
 
     return_data = { "allergens": tags }
 
     return jsonify(return_data)
 
-def getDataFromDB():
-    params = parse.quote_plus("Driver={ODBC Driver 17 for SQL Server};Server=tcp:recipe4medbserver.database.windows.net,1433;Database=Recipe4Me_db;Uid=recipe4me;Pwd={password@123};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
-    engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
+# def getDataFromDB():
+#     params = parse.quote_plus("Driver={ODBC Driver 17 for SQL Server};Server=tcp:recipe4medbserver.database.windows.net,1433;Database=Recipe4Me_db;Uid=recipe4me;Pwd={password@123};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+#     engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 
-    tag_name = []
-    warning = []
+#     tag_name = []
+#     warning = []
 
-    with engine.connect() as con:
-        rs = con.execute('SELECT TagId, tagName, warning FROM Tag ORDER BY TagId')
-        for row in rs:
-            tag_name.append(row[1])
-            warning.append(row[2])
+#     with engine.connect() as con:
+#         rs = con.execute('SELECT TagId, tagName, warning FROM Tag ORDER BY TagId')
+#         for row in rs:
+#             tag_name.append(row[1])
+#             warning.append(row[2])
             
-    return tag_name, warning
+#     return tag_name, warning
 
 
 if __name__ == '__main__':
