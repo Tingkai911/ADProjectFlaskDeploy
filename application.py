@@ -27,6 +27,7 @@ load_dotenv()
 ConnectionString = os.getenv("CONNECTION_STRING")
 
 application = Flask(__name__)
+application.secret_key="password123"
 
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 # wsgi_app = application.wsgi_app
