@@ -35,7 +35,6 @@ application.secret_key="password123"
 @application.route('/')
 def hello():
     """Renders a sample page."""
-    getDataFromDB()
     return "Hello World!"
 
 @application.route("/api/receiveData", methods=["POST"])
@@ -109,7 +108,7 @@ def generate_allergen_tage():
     return jsonify(return_data)
 
 def getDataFromDB():
-    params = parse.quote_plus(ConnectionString)
+    params = parse.quote_plus(ConnectionString.encode("utf-8"))
     engine = sqlalchemy.create_engine("mssql+pyodbc:///?odbc_connect=%s" % params)
 
     tag_name = []
